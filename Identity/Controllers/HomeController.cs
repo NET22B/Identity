@@ -1,4 +1,6 @@
-﻿using Identity.Models;
+﻿using Identity.Data;
+using Identity.Models;
+using Identity.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,17 +11,20 @@ namespace Identity.Controllers
    // [Authorize]
     public class HomeController : Controller
     {
+        private readonly ApplicationDbContext db;
         private readonly ILogger<HomeController> _logger;
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<Member> userManager;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager)
+        public HomeController(ApplicationDbContext db,ILogger<HomeController> logger, UserManager<Member> userManager)
         {
+            this.db = db;
             _logger = logger;
             this.userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
+            var res = db.Users.Where(v => v.IsPro == true);
 
             var user = await userManager.GetUserAsync(User);
 
