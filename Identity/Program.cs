@@ -14,9 +14,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 //1. Replace IdentityUser => Member
-builder.Services.AddDefaultIdentity<Member>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<Member>(options =>
+      {
+          options.SignIn.RequireConfirmedAccount = false;
+          options.Password.RequireDigit = false;
+          options.Password.RequiredLength= 3;
+      })
+            .AddRoles<IdentityRole>()
+            .AddDefaultUI()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
 
 builder.Services.AddControllersWithViews();
 
